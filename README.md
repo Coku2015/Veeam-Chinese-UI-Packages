@@ -33,13 +33,28 @@ VBR WebUI Chinese Package/
 
 ## Linux Appliance 安装
 
-上传并解压对应版本的 Linux 包：
+标准流程：
+
+1. 进入 Veeam Appliance Console。
+2. 选择 `Enable SSH server`，启用 SSH。
+3. 在本机通过 `scp` 将安装包上传到 Appliance 的 `/tmp/` 目录。
+4. 回到 Veeam Appliance Console，选择 `Enter shell` 进入 Shell。
+5. 在 `/tmp` 中解压并执行安装脚本。
+
+上传安装包：
+
+```bash
+scp VeeamWebUiZhCN-13.1.0.411-linux.tar.gz veeamadmin@10.10.1.211:/tmp/
+```
+
+其中 `10.10.1.211` 请替换为你的 Veeam Backup Server / Linux Appliance IP。
+
+进入 Appliance Shell 后执行：
 
 ```bash
 cd /tmp
-tar xzf VeeamWebUiZhCN-13.1.0.411-linux.tar.gz
-cd VeeamWebUiZhCN-13.1.0.411/linux
-sudo ./install-veeam-webui-zh-cn.sh
+tar xvf VeeamWebUiZhCN-13.1.0.411-linux.tar.gz
+bash VeeamWebUiZhCN-13.1.0.411/linux/install-veeam-webui-zh-cn.sh
 ```
 
 安装后刷新浏览器，选择“简体中文”。
@@ -47,9 +62,33 @@ sudo ./install-veeam-webui-zh-cn.sh
 卸载还原：
 
 ```bash
-cd /tmp/VeeamWebUiZhCN-13.1.0.411/linux
-sudo ./uninstall-veeam-webui-zh-cn.sh
+cd /tmp
+bash VeeamWebUiZhCN-13.1.0.411/linux/uninstall-veeam-webui-zh-cn.sh
 ```
+
+### Linux Appliance 操作截图
+
+启用 SSH Server：
+
+![Enable SSH server](screenshots/Xnip2026-08-02_19-24-46.jpg)
+
+进入 Shell：
+
+![Enter shell](screenshots/Xnip2026-08-02_19-21-44.jpg)
+
+Web UI 简体中文效果：
+
+![VBR Web UI Chinese 1](screenshots/Xnip2026-08-02_17-27-51.jpg)
+
+![VBR Web UI Chinese 2](screenshots/Xnip2026-08-02_17-28-09.jpg)
+
+![VBR Web UI Chinese 3](screenshots/Xnip2026-08-02_17-28-21.jpg)
+
+![VBR Web UI Chinese 4](screenshots/Xnip2026-08-02_17-37-24.jpg)
+
+![VBR Web UI Chinese 5](screenshots/Xnip2026-08-02_17-40-09.jpg)
+
+![VBR Web UI Chinese 6](screenshots/Xnip2026-08-02_17-40-44.jpg)
 
 ## Windows 安装
 
@@ -94,4 +133,3 @@ Get-FileHash .\VeeamWebUiZhCN-13.1.0.411-windows.zip -Algorithm SHA256
 - 建议在升级 Veeam 前先卸载本地化包，升级完成后再安装匹配新 build 的中文包。
 - 安装脚本会备份被修改的 Web UI 静态文件，卸载脚本会校验并还原。
 - 如果安装脚本提示 hash 不匹配，说明 Veeam 文件可能已升级或被修改，请不要强行安装不匹配版本。
-

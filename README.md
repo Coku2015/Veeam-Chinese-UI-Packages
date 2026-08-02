@@ -95,12 +95,12 @@ bash VeeamWebUiZhCN-13.1.0.411/linux/uninstall-veeam-webui-zh-cn.sh
 ### Linux Appliance 操作截图
 
 启用 SSH Server：
+![Enter shell](screenshots/Xnip2026-08-02_19-21-44.jpg)
 
+
+进入 Shell 安装：
 ![Enable SSH server](screenshots/Xnip2026-08-02_19-24-46.jpg)
 
-进入 Shell：
-
-![Enter shell](screenshots/Xnip2026-08-02_19-21-44.jpg)
 
 Web UI 简体中文效果：
 

@@ -44,10 +44,10 @@ VBR WebUI Chinese Package/
 上传安装包：
 
 ```bash
-scp VeeamWebUiZhCN-13.1.0.411-linux.tar.gz veeamadmin@10.10.1.211:/tmp/
+scp VeeamWebUiZhCN-13.1.0.411-linux.tar.gz veeamadmin@vbrvsaip:/tmp/
 ```
 
-其中 `10.10.1.211` 请替换为你的 Veeam Backup Server / Linux Appliance IP。
+其中 `vbrvsaip` 请替换为你的 Veeam Backup Server / Linux Appliance 主机名或 IP。
 
 进入 Appliance Shell 后执行：
 

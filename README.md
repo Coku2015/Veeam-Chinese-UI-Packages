@@ -31,15 +31,41 @@ VBR WebUI Chinese Package/
 | --- | --- | --- |
 | Veeam Backup & Replication | `13.1.0.411` | `VBR WebUI Chinese Package/VBR-13.1.0.411/` |
 
+## 快速下载
+
+请根据你的 Veeam Backup & Replication 部署类型下载对应安装包。
+
+| 适用环境 | 下载文件 |
+| --- | --- |
+| Linux Appliance / VSA | [VeeamWebUiZhCN-13.1.0.411-linux.tar.gz](https://github.com/Coku2015/Veeam-Chinese-UI-Packages/raw/main/VBR%20WebUI%20Chinese%20Package/VBR-13.1.0.411/VeeamWebUiZhCN-13.1.0.411-linux.tar.gz) |
+| Windows Backup Server | [VeeamWebUiZhCN-13.1.0.411-windows.zip](https://github.com/Coku2015/Veeam-Chinese-UI-Packages/raw/main/VBR%20WebUI%20Chinese%20Package/VBR-13.1.0.411/VeeamWebUiZhCN-13.1.0.411-windows.zip) |
+| 完整包，包含 Windows 和 Linux | [VeeamWebUiZhCN-13.1.0.411-full.zip](https://github.com/Coku2015/Veeam-Chinese-UI-Packages/raw/main/VBR%20WebUI%20Chinese%20Package/VBR-13.1.0.411/VeeamWebUiZhCN-13.1.0.411-full.zip) |
+| SHA256 校验文件 | [SHA256SUMS-13.1.0.411.txt](https://github.com/Coku2015/Veeam-Chinese-UI-Packages/raw/main/VBR%20WebUI%20Chinese%20Package/VBR-13.1.0.411/SHA256SUMS-13.1.0.411.txt) |
+
+也可以直接浏览版本目录：
+
+[VBR WebUI Chinese Package / VBR-13.1.0.411](https://github.com/Coku2015/Veeam-Chinese-UI-Packages/tree/main/VBR%20WebUI%20Chinese%20Package/VBR-13.1.0.411)
+
 ## Linux Appliance 安装
 
 标准流程：
 
 1. 进入 Veeam Appliance Console。
 2. 选择 `Enable SSH server`，启用 SSH。
-3. 在本机通过 `scp` 将安装包上传到 Appliance 的 `/tmp/` 目录。
-4. 回到 Veeam Appliance Console，选择 `Enter shell` 进入 Shell。
-5. 在 `/tmp` 中解压并执行安装脚本。
+3. 在本机下载 Linux 安装包。
+4. 在本机通过 `scp` 将安装包上传到 Appliance 的 `/tmp/` 目录。
+5. 回到 Veeam Appliance Console，选择 `Enter shell` 进入 Shell。
+6. 在 `/tmp` 中解压并执行安装脚本。
+
+在本机下载 Linux 安装包：
+
+```bash
+curl -L -o VeeamWebUiZhCN-13.1.0.411-linux.tar.gz "https://github.com/Coku2015/Veeam-Chinese-UI-Packages/raw/main/VBR%20WebUI%20Chinese%20Package/VBR-13.1.0.411/VeeamWebUiZhCN-13.1.0.411-linux.tar.gz"
+```
+
+如果不使用命令行下载，也可以在浏览器中点击：
+
+[下载 Linux 安装包](https://github.com/Coku2015/Veeam-Chinese-UI-Packages/raw/main/VBR%20WebUI%20Chinese%20Package/VBR-13.1.0.411/VeeamWebUiZhCN-13.1.0.411-linux.tar.gz)
 
 上传安装包：
 
@@ -92,11 +118,20 @@ Web UI 简体中文效果：
 
 ## Windows 安装
 
-在 Veeam Backup Server 上，以管理员身份打开 PowerShell：
+在 Veeam Backup Server 上，以管理员身份打开 PowerShell。
+
+下载安装包：
 
 ```powershell
+Invoke-WebRequest -Uri "https://github.com/Coku2015/Veeam-Chinese-UI-Packages/raw/main/VBR%20WebUI%20Chinese%20Package/VBR-13.1.0.411/VeeamWebUiZhCN-13.1.0.411-windows.zip" -OutFile "$env:USERPROFILE\Downloads\VeeamWebUiZhCN-13.1.0.411-windows.zip"
+```
+
+解压并安装：
+
+```powershell
+Expand-Archive -LiteralPath "$env:USERPROFILE\Downloads\VeeamWebUiZhCN-13.1.0.411-windows.zip" -DestinationPath "$env:USERPROFILE\Downloads" -Force
 Set-ExecutionPolicy -Scope Process Bypass
-cd C:\Users\Administrator\Downloads\VeeamWebUiZhCN-13.1.0.411\windows
+cd "$env:USERPROFILE\Downloads\VeeamWebUiZhCN-13.1.0.411\windows"
 .\Install-VeeamWebUiZhCN.ps1
 ```
 
@@ -106,13 +141,19 @@ cd C:\Users\Administrator\Downloads\VeeamWebUiZhCN-13.1.0.411\windows
 
 ```powershell
 Set-ExecutionPolicy -Scope Process Bypass
-cd C:\Users\Administrator\Downloads\VeeamWebUiZhCN-13.1.0.411\windows
+cd "$env:USERPROFILE\Downloads\VeeamWebUiZhCN-13.1.0.411\windows"
 .\Uninstall-VeeamWebUiZhCN.ps1
 ```
 
 ## 校验文件
 
 每个版本目录中提供 `SHA256SUMS-<build>.txt`，可用于校验下载文件完整性。
+
+下载校验文件：
+
+```bash
+curl -L -o SHA256SUMS-13.1.0.411.txt "https://github.com/Coku2015/Veeam-Chinese-UI-Packages/raw/main/VBR%20WebUI%20Chinese%20Package/VBR-13.1.0.411/SHA256SUMS-13.1.0.411.txt"
+```
 
 Linux/macOS：
 

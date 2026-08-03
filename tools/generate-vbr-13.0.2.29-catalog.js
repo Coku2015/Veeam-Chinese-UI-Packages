@@ -6,7 +6,8 @@ const vm = require('vm');
 function usage() {
   console.error(
     'Usage: node tools/generate-vbr-13.0.2.29-catalog.js ' +
-      '<VBR-13.0.2.29-plugin.js> <VBR-13.1.0.411-catalog.js> <output.js>',
+      '<VBR-13.0.2.29-plugin.js> <VBR-13.1.0.411-catalog.js> <output.js> ' +
+      '[reviewed-overrides.json]',
   );
   process.exit(2);
 }
@@ -80,7 +81,16 @@ function buildKeyMap(catalog) {
   return values;
 }
 
-function generate(oldEnglish, newChinese, sourceTextMap) {
+function loadReviewedOverrides(overridesPath) {
+  if (!overridesPath) return { sourceText: {}, resource: {} };
+  const overrides = JSON.parse(fs.readFileSync(overridesPath, 'utf8'));
+  return {
+    sourceText: overrides.sourceText || {},
+    resource: overrides.resource || {},
+  };
+}
+
+function generate(oldEnglish, newChinese, sourceTextMap, reviewedOverrides) {
   const chineseByKey = buildKeyMap(newChinese);
   const catalog = {};
   const usedSourceTextMap = {};
@@ -88,6 +98,10 @@ function generate(oldEnglish, newChinese, sourceTextMap) {
   let namespaceAndKeyMatches = 0;
   let keyMatches = 0;
   let sourceTextMatches = 0;
+  let reviewedSourceTextMatches = 0;
+  let reviewedResourceMatches = 0;
+  const usedReviewedSourceTexts = new Set();
+  const usedReviewedResources = new Set();
 
   for (const [namespaceName, namespace] of Object.entries(oldEnglish)) {
     const translatedNamespace = {};
@@ -106,6 +120,24 @@ function generate(oldEnglish, newChinese, sourceTextMap) {
         } else if (Object.prototype.hasOwnProperty.call(sourceTextMap, englishText)) {
           translated = sourceTextMap[englishText];
           sourceTextMatches += 1;
+        } else {
+          const resourceOverride = reviewedOverrides.resource[`${namespaceName}::${key}`];
+          if (resourceOverride) {
+            if (resourceOverride.english !== englishText) {
+              throw new Error(
+                `Reviewed override English text changed for ${namespaceName}::${key}`,
+              );
+            }
+            translated = resourceOverride.chinese;
+            reviewedResourceMatches += 1;
+            usedReviewedResources.add(`${namespaceName}::${key}`);
+          } else if (
+            Object.prototype.hasOwnProperty.call(reviewedOverrides.sourceText, englishText)
+          ) {
+            translated = reviewedOverrides.sourceText[englishText];
+            reviewedSourceTextMatches += 1;
+            usedReviewedSourceTexts.add(englishText);
+          }
         }
       }
 
@@ -119,7 +151,23 @@ function generate(oldEnglish, newChinese, sourceTextMap) {
     }
   }
 
-  const translated = namespaceAndKeyMatches + keyMatches + sourceTextMatches;
+  for (const englishText of Object.keys(reviewedOverrides.sourceText)) {
+    if (!usedReviewedSourceTexts.has(englishText)) {
+      throw new Error(`Reviewed source-text override was not used: ${englishText}`);
+    }
+  }
+  for (const resourceId of Object.keys(reviewedOverrides.resource)) {
+    if (!usedReviewedResources.has(resourceId)) {
+      throw new Error(`Reviewed resource override was not used: ${resourceId}`);
+    }
+  }
+
+  const translated =
+    namespaceAndKeyMatches +
+    keyMatches +
+    sourceTextMatches +
+    reviewedSourceTextMatches +
+    reviewedResourceMatches;
   return {
     catalog,
     sourceTextMap: usedSourceTextMap,
@@ -132,16 +180,19 @@ function generate(oldEnglish, newChinese, sourceTextMap) {
       namespaceAndKeyMatches,
       keyMatches,
       sourceTextMatches,
+      reviewedSourceTextMatches,
+      reviewedResourceMatches,
     },
   };
 }
 
 function main() {
-  if (process.argv.length !== 5) usage();
-  const [, , pluginPath, sourceCatalogPath, outputPath] = process.argv;
+  if (process.argv.length !== 5 && process.argv.length !== 6) usage();
+  const [, , pluginPath, sourceCatalogPath, outputPath, overridesPath] = process.argv;
   const oldEnglish = loadOldEnglishResources(pluginPath);
   const { catalog: newChinese, sourceTextMap } = loadNewChineseResources(sourceCatalogPath);
-  const result = generate(oldEnglish, newChinese, sourceTextMap);
+  const reviewedOverrides = loadReviewedOverrides(overridesPath);
+  const result = generate(oldEnglish, newChinese, sourceTextMap, reviewedOverrides);
 
   const output = [
     '/* Generated for VBR Web UI 13.0.2.29 from the reviewed 13.1.0.411 catalog. */',

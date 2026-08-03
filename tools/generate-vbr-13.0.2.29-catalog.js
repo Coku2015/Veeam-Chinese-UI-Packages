@@ -7,7 +7,7 @@ function usage() {
   console.error(
     'Usage: node tools/generate-vbr-13.0.2.29-catalog.js ' +
       '<VBR-13.0.2.29-plugin.js> <VBR-13.1.0.411-catalog.js> <output.js> ' +
-      '[reviewed-overrides.json]',
+      '[reviewed-overrides.json ...]',
   );
   process.exit(2);
 }
@@ -81,13 +81,34 @@ function buildKeyMap(catalog) {
   return values;
 }
 
-function loadReviewedOverrides(overridesPath) {
-  if (!overridesPath) return { sourceText: {}, resource: {} };
-  const overrides = JSON.parse(fs.readFileSync(overridesPath, 'utf8'));
-  return {
-    sourceText: overrides.sourceText || {},
-    resource: overrides.resource || {},
-  };
+function extractPlaceholders(text) {
+  return [...text.matchAll(/\{\{[^{}]+\}\}|\{[^{}]+\}|%\d*\$?[a-z]|\[\[[^\]]+\]\]/gi)]
+    .map((match) => match[0])
+    .sort();
+}
+
+function validateOverridePlaceholders(resourceId, englishText, chineseText) {
+  const englishPlaceholders = extractPlaceholders(englishText);
+  const chinesePlaceholders = extractPlaceholders(chineseText);
+  if (JSON.stringify(englishPlaceholders) !== JSON.stringify(chinesePlaceholders)) {
+    throw new Error(`Reviewed override placeholders changed for ${resourceId}`);
+  }
+}
+
+function loadReviewedOverrides(overridesPaths) {
+  const merged = { sourceText: {}, resource: {} };
+  for (const overridesPath of overridesPaths) {
+    const overrides = JSON.parse(fs.readFileSync(overridesPath, 'utf8'));
+    for (const kind of ['sourceText', 'resource']) {
+      for (const [key, value] of Object.entries(overrides[kind] || {})) {
+        if (Object.prototype.hasOwnProperty.call(merged[kind], key)) {
+          throw new Error(`Duplicate ${kind} override: ${key}`);
+        }
+        merged[kind][key] = value;
+      }
+    }
+  }
+  return merged;
 }
 
 function generate(oldEnglish, newChinese, sourceTextMap, reviewedOverrides) {
@@ -127,13 +148,23 @@ function generate(oldEnglish, newChinese, sourceTextMap, reviewedOverrides) {
               throw new Error(
                 `Reviewed override English text changed for ${namespaceName}::${key}`,
               );
-            }
-            translated = resourceOverride.chinese;
+          }
+          validateOverridePlaceholders(
+            `${namespaceName}::${key}`,
+            englishText,
+            resourceOverride.chinese,
+          );
+          translated = resourceOverride.chinese;
             reviewedResourceMatches += 1;
             usedReviewedResources.add(`${namespaceName}::${key}`);
           } else if (
             Object.prototype.hasOwnProperty.call(reviewedOverrides.sourceText, englishText)
           ) {
+            validateOverridePlaceholders(
+              `${namespaceName}::${key}`,
+              englishText,
+              reviewedOverrides.sourceText[englishText],
+            );
             translated = reviewedOverrides.sourceText[englishText];
             reviewedSourceTextMatches += 1;
             usedReviewedSourceTexts.add(englishText);
@@ -187,11 +218,11 @@ function generate(oldEnglish, newChinese, sourceTextMap, reviewedOverrides) {
 }
 
 function main() {
-  if (process.argv.length !== 5 && process.argv.length !== 6) usage();
-  const [, , pluginPath, sourceCatalogPath, outputPath, overridesPath] = process.argv;
+  if (process.argv.length < 5) usage();
+  const [, , pluginPath, sourceCatalogPath, outputPath, ...overridesPaths] = process.argv;
   const oldEnglish = loadOldEnglishResources(pluginPath);
   const { catalog: newChinese, sourceTextMap } = loadNewChineseResources(sourceCatalogPath);
-  const reviewedOverrides = loadReviewedOverrides(overridesPath);
+  const reviewedOverrides = loadReviewedOverrides(overridesPaths);
   const result = generate(oldEnglish, newChinese, sourceTextMap, reviewedOverrides);
 
   const output = [

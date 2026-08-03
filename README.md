@@ -12,6 +12,10 @@
 
 ```text
 VBR WebUI Chinese Package/
+├── VBR-13.0.2.29/
+│   ├── VeeamWebUiZhCN-13.0.2.29-linux.tar.gz
+│   └── SHA256SUMS-13.0.2.29.txt
+│
 └── VBR-13.1.0.411/
     ├── VeeamWebUiZhCN-13.1.0.411-linux.tar.gz
     ├── VeeamWebUiZhCN-13.1.0.411-windows.zip
@@ -27,11 +31,23 @@ VBR WebUI Chinese Package/
 
 当前支持版本：
 
-| 产品 | Web UI build | 目录 |
-| --- | --- | --- |
-| Veeam Backup & Replication | `13.1.0.411` | `VBR WebUI Chinese Package/VBR-13.1.0.411/` |
+| 产品 | Web UI build | 环境 | 翻译覆盖率 | 目录 |
+| --- | --- | --- | --- | --- |
+| Veeam Backup & Replication | `13.0.2.29` | Linux Appliance / VSA | `88.84%`，未匹配文本回退英文 | `VBR WebUI Chinese Package/VBR-13.0.2.29/` |
+| Veeam Backup & Replication | `13.1.0.411` | Linux Appliance / Windows | 完整发布包 | `VBR WebUI Chinese Package/VBR-13.1.0.411/` |
 
 ## 快速下载
+
+### VBR 13.0.2.29 Linux Appliance
+
+| 适用环境 | 下载文件 |
+| --- | --- |
+| Linux Appliance / VSA | [VeeamWebUiZhCN-13.0.2.29-linux.tar.gz](https://github.com/Coku2015/Veeam-Chinese-UI-Packages/raw/main/VBR%20WebUI%20Chinese%20Package/VBR-13.0.2.29/VeeamWebUiZhCN-13.0.2.29-linux.tar.gz) |
+| SHA256 校验文件 | [SHA256SUMS-13.0.2.29.txt](https://github.com/Coku2015/Veeam-Chinese-UI-Packages/raw/main/VBR%20WebUI%20Chinese%20Package/VBR-13.0.2.29/SHA256SUMS-13.0.2.29.txt) |
+
+此版本从已审校的 `13.1.0.411` 中文目录迁移而来。旧版 `6102` 条资源中已匹配 `5421` 条；其余旧版专有文本安全回退为英文。
+
+### VBR 13.1.0.411
 
 请根据你的 Veeam Backup & Replication 部署类型下载对应安装包。
 
@@ -47,6 +63,29 @@ VBR WebUI Chinese Package/
 [VBR WebUI Chinese Package / VBR-13.1.0.411](https://github.com/Coku2015/Veeam-Chinese-UI-Packages/tree/main/VBR%20WebUI%20Chinese%20Package/VBR-13.1.0.411)
 
 ## Linux Appliance 安装
+
+### 安装 VBR 13.0.2.29 中文包
+
+```bash
+curl -L -o VeeamWebUiZhCN-13.0.2.29-linux.tar.gz "https://github.com/Coku2015/Veeam-Chinese-UI-Packages/raw/main/VBR%20WebUI%20Chinese%20Package/VBR-13.0.2.29/VeeamWebUiZhCN-13.0.2.29-linux.tar.gz"
+```
+
+上传到 Appliance 的 `/tmp/` 后，在 Appliance Console 的 root shell 中执行：
+
+```bash
+cd /tmp
+tar xvf VeeamWebUiZhCN-13.0.2.29-linux.tar.gz
+bash VeeamWebUiZhCN-13.0.2.29/linux/install-veeam-webui-zh-cn.sh
+```
+
+卸载还原：
+
+```bash
+cd /tmp
+bash VeeamWebUiZhCN-13.0.2.29/linux/uninstall-veeam-webui-zh-cn.sh
+```
+
+### 安装 VBR 13.1.0.411 中文包
 
 标准流程：
 

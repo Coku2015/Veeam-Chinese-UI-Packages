@@ -92,13 +92,13 @@
   ]);
   var generatedSourceMap = globalThis.__VeeamWebUiZhSourceTextMap || {};
   Object.keys(generatedSourceMap).forEach(function (source) {
-    if (!dictionary.has(source)) dictionary.set(source, generatedSourceMap[source]);
+    var translated = generatedSourceMap[source];
+    if (!dictionary.has(source) && translated !== source) dictionary.set(source, translated);
   });
 
   var skipTags = new Set(['SCRIPT', 'STYLE', 'NOSCRIPT', 'TEXTAREA', 'CODE', 'PRE']);
   var attributeNames = ['aria-label', 'placeholder', 'title', 'alt'];
   var started = false;
-  var lastActive = false;
 
   function active() {
     try {
@@ -135,24 +135,26 @@
       var colonTranslation = dictionary.get(withoutColon);
       if (colonTranslation) translated = /：$/u.test(colonTranslation) ? colonTranslation : colonTranslation + '：';
     }
-    return translated ? match[1] + translated + match[3] : null;
+    if (!translated || translated === core) return null;
+    return match[1] + translated + match[3];
   }
 
   function translateTextNode(node) {
     if (!active() || !node.parentElement || skipTags.has(node.parentElement.tagName)) return;
     var translated = translate(node.nodeValue);
-    if (translated) node.nodeValue = translated;
+    if (translated && translated !== node.nodeValue) node.nodeValue = translated;
   }
 
   function translateElement(element) {
     if (!active() || !(element instanceof Element) || skipTags.has(element.tagName)) return;
     attributeNames.forEach(function (name) {
-      var translated = translate(element.getAttribute(name));
-      if (translated) element.setAttribute(name, translated);
+      var current = element.getAttribute(name);
+      var translated = translate(current);
+      if (translated && translated !== current) element.setAttribute(name, translated);
     });
     if (element instanceof HTMLInputElement && /^(button|submit|reset)$/i.test(element.type)) {
       var value = translate(element.value);
-      if (value) element.value = value;
+      if (value && value !== element.value) element.value = value;
     }
   }
 
@@ -177,7 +179,6 @@
   function start() {
     if (started || !active()) return;
     started = true;
-    lastActive = true;
     syncPluginLanguage();
     document.documentElement.lang = 'zh-CN';
     translateTree(document);
@@ -189,15 +190,6 @@
       });
       addBadge();
     }).observe(document.documentElement, { childList: true, characterData: true, subtree: true });
-    setInterval(function () {
-      var isActive = active();
-      if (isActive) {
-        syncPluginLanguage();
-        document.documentElement.lang = 'zh-CN';
-        translateTree(document);
-      }
-      lastActive = isActive;
-    }, 750);
   }
 
   if (document.readyState === 'loading') {

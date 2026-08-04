@@ -8,6 +8,7 @@ OUTPUT_PATH="${REPO_ROOT}/VBR WebUI Chinese Package/VBR-13.0.2.29/${PACKAGE_NAME
 TEMP_OUTPUT="${OUTPUT_PATH}.new.$$"
 
 node "${REPO_ROOT}/tools/test-vbr-13.0.2.29-native-guard.js"
+node "${REPO_ROOT}/tools/test-vbr-13.0.2.29-catalog-placeholders.js"
 
 COPYFILE_DISABLE=1 tar \
   --no-xattrs \

@@ -87,11 +87,19 @@ function extractPlaceholders(text) {
     .sort();
 }
 
-function validateOverridePlaceholders(resourceId, englishText, chineseText) {
+function validateTranslationPlaceholders(resourceId, englishText, chineseText) {
   const englishPlaceholders = extractPlaceholders(englishText);
   const chinesePlaceholders = extractPlaceholders(chineseText);
   if (JSON.stringify(englishPlaceholders) !== JSON.stringify(chinesePlaceholders)) {
-    throw new Error(`Reviewed override placeholders changed for ${resourceId}`);
+    throw new Error(
+      [
+        `Translation placeholders changed for ${resourceId}`,
+        `English: ${JSON.stringify(englishText)}`,
+        `Chinese: ${JSON.stringify(chineseText)}`,
+        `English placeholders: ${JSON.stringify(englishPlaceholders)}`,
+        `Chinese placeholders: ${JSON.stringify(chinesePlaceholders)}`,
+      ].join('\n'),
+    );
   }
 }
 
@@ -129,8 +137,23 @@ function generate(oldEnglish, newChinese, sourceTextMap, reviewedOverrides) {
     for (const [key, englishText] of Object.entries(namespace)) {
       total += 1;
       let translated;
+      const resourceId = `${namespaceName}::${key}`;
+      const resourceOverride = reviewedOverrides.resource[resourceId];
 
-      if (newChinese[namespaceName] && key in newChinese[namespaceName]) {
+      if (resourceOverride) {
+        if (resourceOverride.english !== englishText) {
+          throw new Error(
+            [
+              `Reviewed override English text changed for ${resourceId}`,
+              `Expected: ${JSON.stringify(resourceOverride.english)}`,
+              `Current: ${JSON.stringify(englishText)}`,
+            ].join('\n'),
+          );
+        }
+        translated = resourceOverride.chinese;
+        reviewedResourceMatches += 1;
+        usedReviewedResources.add(resourceId);
+      } else if (newChinese[namespaceName] && key in newChinese[namespaceName]) {
         translated = newChinese[namespaceName][key];
         namespaceAndKeyMatches += 1;
       } else {
@@ -141,38 +164,17 @@ function generate(oldEnglish, newChinese, sourceTextMap, reviewedOverrides) {
         } else if (Object.prototype.hasOwnProperty.call(sourceTextMap, englishText)) {
           translated = sourceTextMap[englishText];
           sourceTextMatches += 1;
-        } else {
-          const resourceOverride = reviewedOverrides.resource[`${namespaceName}::${key}`];
-          if (resourceOverride) {
-            if (resourceOverride.english !== englishText) {
-              throw new Error(
-                `Reviewed override English text changed for ${namespaceName}::${key}`,
-              );
-          }
-          validateOverridePlaceholders(
-            `${namespaceName}::${key}`,
-            englishText,
-            resourceOverride.chinese,
-          );
-          translated = resourceOverride.chinese;
-            reviewedResourceMatches += 1;
-            usedReviewedResources.add(`${namespaceName}::${key}`);
-          } else if (
-            Object.prototype.hasOwnProperty.call(reviewedOverrides.sourceText, englishText)
-          ) {
-            validateOverridePlaceholders(
-              `${namespaceName}::${key}`,
-              englishText,
-              reviewedOverrides.sourceText[englishText],
-            );
-            translated = reviewedOverrides.sourceText[englishText];
-            reviewedSourceTextMatches += 1;
-            usedReviewedSourceTexts.add(englishText);
-          }
+        } else if (
+          Object.prototype.hasOwnProperty.call(reviewedOverrides.sourceText, englishText)
+        ) {
+          translated = reviewedOverrides.sourceText[englishText];
+          reviewedSourceTextMatches += 1;
+          usedReviewedSourceTexts.add(englishText);
         }
       }
 
       if (translated !== undefined) {
+        validateTranslationPlaceholders(resourceId, englishText, translated);
         translatedNamespace[key] = translated;
         usedSourceTextMap[englishText] = translated;
       }

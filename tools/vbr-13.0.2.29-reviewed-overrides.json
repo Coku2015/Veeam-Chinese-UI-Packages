@@ -39,6 +39,26 @@
     "[TBD] Transaction log backup job will automatically select the most suitable server from the following servers:": "事务日志备份作业将从以下服务器中自动选择最合适的服务器："
   },
   "resource": {
+    "appFLR::appFLR|browse|title": {
+      "english": "Browse",
+      "chinese": "浏览"
+    },
+    "appFLR::appFLR|audit|title": {
+      "english": "Audit",
+      "chinese": "审计"
+    },
+    "inventoryTreeWithSearch::inventoryTreeWithSearch|search|placeholder|host": {
+      "english": "Type in an object name on {{hostName}}",
+      "chinese": "在 {{hostName}} 上输入对象名称"
+    },
+    "proxiesPage::proxiesPage|removeDialog|text": {
+      "english": "Remove proxy?",
+      "chinese": "是否移除代理/Worker？"
+    },
+    "emailOptionsPage::emailOptionsPage|field|subject|placeholder": {
+      "english": "Specify a subject for the sent message",
+      "chinese": "指定所发送邮件的主题"
+    },
     "fileLevelRestoreAuditPage::fileLevelRestoreAuditPage|grid|toolbar|fileSearch|placeholder": {
       "english": "Search for file or folder",
       "chinese": "搜索文件或文件夹"

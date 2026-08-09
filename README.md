@@ -32,6 +32,12 @@ VeeamONE WebUI Chinese Package/
 
 目录中的版本号必须与对应产品的 Web UI build 匹配。请不要把不同 build 的包混用。
 
+## 备份、卸载与升级安全
+
+安装器会在目标服务器本地创建带 SHA256 manifest 的原始文件备份。卸载时会先验证当前文件确实由本包写入，再还原原始文件、删除本包生成的中文资源，并验证还原后的哈希；检测到 Veeam 已升级或文件被其他程序修改时会停止，不会强行覆盖。
+
+备份文件来自客户自己的 Veeam 安装，不作为公共 GitHub 资源发布。备份目录、还原文件映射、卸载流程和脚本丢失时的手工还原步骤见：[备份与手工还原文档](docs/BACKUP-RECOVERY.md)。升级 Veeam 前应先卸载本地化包并确认原始哈希验证成功，不能跨 build 使用旧备份。
+
 ## VBR Web UI 中文包说明
 
 此包会在 Veeam Backup & Replication Web UI 中增加“简体中文”语言选项，不覆盖原有 English、German、French、Japanese。

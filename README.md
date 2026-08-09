@@ -25,8 +25,8 @@ VBR WebUI Chinese Package/
 
 VeeamONE WebUI Chinese Package/
 └── VeeamONE-13.1.0.7034/
-    ├── VeeamWebUiZhCN-13.1.0.7034-windows.zip
-    ├── VeeamWebUiZhCN-13.1.0.7034-full.zip
+    ├── VeeamOneWebUiZhCN-13.1.0.7034-windows.zip
+    ├── VeeamOneWebUiZhCN-13.1.0.7034-full.zip
     └── SHA256SUMS-13.1.0.7034.txt
 ```
 
@@ -76,8 +76,8 @@ Veeam ONE 包会在登录页和主 Web UI 中注册 `zh-CN (Simplified Chinese)`
 
 | 适用环境 | 下载文件 |
 | --- | --- |
-| Windows Veeam ONE Server | [VeeamWebUiZhCN-13.1.0.7034-windows.zip](https://github.com/Coku2015/Veeam-Chinese-UI-Packages/raw/main/VeeamONE%20WebUI%20Chinese%20Package/VeeamONE-13.1.0.7034/VeeamWebUiZhCN-13.1.0.7034-windows.zip) |
-| 完整包 | [VeeamWebUiZhCN-13.1.0.7034-full.zip](https://github.com/Coku2015/Veeam-Chinese-UI-Packages/raw/main/VeeamONE%20WebUI%20Chinese%20Package/VeeamONE-13.1.0.7034/VeeamWebUiZhCN-13.1.0.7034-full.zip) |
+| Windows Veeam ONE Server | [VeeamOneWebUiZhCN-13.1.0.7034-windows.zip](https://github.com/Coku2015/Veeam-Chinese-UI-Packages/raw/main/VeeamONE%20WebUI%20Chinese%20Package/VeeamONE-13.1.0.7034/VeeamOneWebUiZhCN-13.1.0.7034-windows.zip) |
+| 完整包 | [VeeamOneWebUiZhCN-13.1.0.7034-full.zip](https://github.com/Coku2015/Veeam-Chinese-UI-Packages/raw/main/VeeamONE%20WebUI%20Chinese%20Package/VeeamONE-13.1.0.7034/VeeamOneWebUiZhCN-13.1.0.7034-full.zip) |
 | SHA256 校验文件 | [SHA256SUMS-13.1.0.7034.txt](https://github.com/Coku2015/Veeam-Chinese-UI-Packages/raw/main/VeeamONE%20WebUI%20Chinese%20Package/VeeamONE-13.1.0.7034/SHA256SUMS-13.1.0.7034.txt) |
 
 也可以直接浏览版本目录：
@@ -184,10 +184,10 @@ Web UI 简体中文效果：
 在 Veeam ONE Server 上，以管理员身份打开 PowerShell：
 
 ```powershell
-Invoke-WebRequest -Uri "https://github.com/Coku2015/Veeam-Chinese-UI-Packages/raw/main/VeeamONE%20WebUI%20Chinese%20Package/VeeamONE-13.1.0.7034/VeeamWebUiZhCN-13.1.0.7034-windows.zip" -OutFile "$env:USERPROFILE\Downloads\VeeamWebUiZhCN-13.1.0.7034-windows.zip"
-Expand-Archive -LiteralPath "$env:USERPROFILE\Downloads\VeeamWebUiZhCN-13.1.0.7034-windows.zip" -DestinationPath "$env:USERPROFILE\Downloads" -Force
+Invoke-WebRequest -Uri "https://github.com/Coku2015/Veeam-Chinese-UI-Packages/raw/main/VeeamONE%20WebUI%20Chinese%20Package/VeeamONE-13.1.0.7034/VeeamOneWebUiZhCN-13.1.0.7034-windows.zip" -OutFile "$env:USERPROFILE\Downloads\VeeamOneWebUiZhCN-13.1.0.7034-windows.zip"
+Expand-Archive -LiteralPath "$env:USERPROFILE\Downloads\VeeamOneWebUiZhCN-13.1.0.7034-windows.zip" -DestinationPath "$env:USERPROFILE\Downloads" -Force
 Set-ExecutionPolicy -Scope Process Bypass
-cd "$env:USERPROFILE\Downloads\VeeamWebUiZhCN-13.1.0.7034\windows"
+cd "$env:USERPROFILE\Downloads\VeeamOneWebUiZhCN-13.1.0.7034\windows"
 .\Install-VeeamOneWebUiZhCN.ps1
 ```
 
@@ -197,7 +197,7 @@ cd "$env:USERPROFILE\Downloads\VeeamWebUiZhCN-13.1.0.7034\windows"
 
 ```powershell
 Set-ExecutionPolicy -Scope Process Bypass
-cd "$env:USERPROFILE\Downloads\VeeamWebUiZhCN-13.1.0.7034\windows"
+cd "$env:USERPROFILE\Downloads\VeeamOneWebUiZhCN-13.1.0.7034\windows"
 .\Uninstall-VeeamOneWebUiZhCN.ps1
 ```
 

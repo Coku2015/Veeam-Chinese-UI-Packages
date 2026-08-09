@@ -5,8 +5,9 @@
 当前已发布：
 
 - Veeam Backup & Replication Web UI 简体中文包
+- Veeam ONE Web UI 简体中文包（Windows）
 
-未来如果制作 Veeam ONE、Veeam Recovery Orchestrator 等产品的中文 UI 包，也会按产品分类放在本仓库中。
+各产品包按产品和 build 分目录保存。旧版包会继续保留，新的统一版本也会发布到 [Releases](https://github.com/Coku2015/Veeam-Chinese-UI-Packages/releases)。
 
 ## 目录结构
 
@@ -21,9 +22,15 @@ VBR WebUI Chinese Package/
     ├── VeeamWebUiZhCN-13.1.0.411-windows.zip
     ├── VeeamWebUiZhCN-13.1.0.411-full.zip
     └── SHA256SUMS-13.1.0.411.txt
+
+VeeamONE WebUI Chinese Package/
+└── VeeamONE-13.1.0.7034/
+    ├── VeeamWebUiZhCN-13.1.0.7034-windows.zip
+    ├── VeeamWebUiZhCN-13.1.0.7034-full.zip
+    └── SHA256SUMS-13.1.0.7034.txt
 ```
 
-目录中的版本号必须与 Veeam Backup & Replication Web UI build 匹配。请不要把不同 build 的包混用。
+目录中的版本号必须与对应产品的 Web UI build 匹配。请不要把不同 build 的包混用。
 
 ## VBR Web UI 中文包说明
 
@@ -35,6 +42,9 @@ VBR WebUI Chinese Package/
 | --- | --- | --- | --- | --- |
 | Veeam Backup & Replication | `13.0.2.29` | Linux Appliance / VSA | `99.97%`，仅剩 2 条空字符串资源 | `VBR WebUI Chinese Package/VBR-13.0.2.29/` |
 | Veeam Backup & Replication | `13.1.0.411` | Linux Appliance / Windows | 完整发布包 | `VBR WebUI Chinese Package/VBR-13.1.0.411/` |
+| Veeam ONE | `13.1.0.7034` | Windows | 完整发布包 | `VeeamONE WebUI Chinese Package/VeeamONE-13.1.0.7034/` |
+
+Veeam ONE 包会在登录页和主 Web UI 中注册 `zh-CN (Simplified Chinese)`，保留 English、Japanese、Deutsch、Français。它还包含 Veeam ONE 远程 Analytics/Threat Center 使用的插件资源，因此 VBR 连接 Veeam ONE 后，VBR Web UI 的“分析”页面也会使用中文。VBR 未连接 Veeam ONE 时不会加载这些远程资源，不会改变 VBR 原有页面。
 
 ## 快速下载
 
@@ -61,6 +71,18 @@ VBR WebUI Chinese Package/
 也可以直接浏览版本目录：
 
 [VBR WebUI Chinese Package / VBR-13.1.0.411](https://github.com/Coku2015/Veeam-Chinese-UI-Packages/tree/main/VBR%20WebUI%20Chinese%20Package/VBR-13.1.0.411)
+
+### Veeam ONE 13.1.0.7034
+
+| 适用环境 | 下载文件 |
+| --- | --- |
+| Windows Veeam ONE Server | [VeeamWebUiZhCN-13.1.0.7034-windows.zip](https://github.com/Coku2015/Veeam-Chinese-UI-Packages/raw/main/VeeamONE%20WebUI%20Chinese%20Package/VeeamONE-13.1.0.7034/VeeamWebUiZhCN-13.1.0.7034-windows.zip) |
+| 完整包 | [VeeamWebUiZhCN-13.1.0.7034-full.zip](https://github.com/Coku2015/Veeam-Chinese-UI-Packages/raw/main/VeeamONE%20WebUI%20Chinese%20Package/VeeamONE-13.1.0.7034/VeeamWebUiZhCN-13.1.0.7034-full.zip) |
+| SHA256 校验文件 | [SHA256SUMS-13.1.0.7034.txt](https://github.com/Coku2015/Veeam-Chinese-UI-Packages/raw/main/VeeamONE%20WebUI%20Chinese%20Package/VeeamONE-13.1.0.7034/SHA256SUMS-13.1.0.7034.txt) |
+
+也可以直接浏览版本目录：
+
+[VeeamONE WebUI Chinese Package / VeeamONE-13.1.0.7034](https://github.com/Coku2015/Veeam-Chinese-UI-Packages/tree/main/VeeamONE%20WebUI%20Chinese%20Package/VeeamONE-13.1.0.7034)
 
 ## Linux Appliance 安装
 
@@ -156,6 +178,28 @@ Web UI 简体中文效果：
 ![VBR Web UI Chinese 6](screenshots/Xnip2026-08-02_17-40-44.jpg)
 
 ## Windows 安装
+
+### 安装 Veeam ONE 13.1.0.7034 中文包
+
+在 Veeam ONE Server 上，以管理员身份打开 PowerShell：
+
+```powershell
+Invoke-WebRequest -Uri "https://github.com/Coku2015/Veeam-Chinese-UI-Packages/raw/main/VeeamONE%20WebUI%20Chinese%20Package/VeeamONE-13.1.0.7034/VeeamWebUiZhCN-13.1.0.7034-windows.zip" -OutFile "$env:USERPROFILE\Downloads\VeeamWebUiZhCN-13.1.0.7034-windows.zip"
+Expand-Archive -LiteralPath "$env:USERPROFILE\Downloads\VeeamWebUiZhCN-13.1.0.7034-windows.zip" -DestinationPath "$env:USERPROFILE\Downloads" -Force
+Set-ExecutionPolicy -Scope Process Bypass
+cd "$env:USERPROFILE\Downloads\VeeamWebUiZhCN-13.1.0.7034\windows"
+.\Install-VeeamOneWebUiZhCN.ps1
+```
+
+安装后对登录页和 Web UI 执行 `Ctrl+F5`，在语言菜单中选择 `zh-CN (Simplified Chinese)`。如果 VBR 已连接此 Veeam ONE，重新载入 VBR 的“分析”页面即可看到中文。
+
+卸载还原：
+
+```powershell
+Set-ExecutionPolicy -Scope Process Bypass
+cd "$env:USERPROFILE\Downloads\VeeamWebUiZhCN-13.1.0.7034\windows"
+.\Uninstall-VeeamOneWebUiZhCN.ps1
+```
 
 在 Veeam Backup Server 上，以管理员身份打开 PowerShell。
 

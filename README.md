@@ -17,11 +17,17 @@ VBR WebUI Chinese Package/
 │   ├── VeeamWebUiZhCN-13.0.2.29-linux.tar.gz
 │   └── SHA256SUMS-13.0.2.29.txt
 │
-└── VBR-13.1.0.411/
-    ├── VBRWebUiZhCN-13.1.0.411-linux.tar.gz
-    ├── VBRWebUiZhCN-13.1.0.411-windows.zip
-    ├── VBRWebUiZhCN-13.1.0.411-full.zip
-    └── SHA256SUMS-13.1.0.411.txt
+├── VBR-13.1.0.411/
+│   ├── VBRWebUiZhCN-13.1.0.411-linux.tar.gz
+│   ├── VBRWebUiZhCN-13.1.0.411-windows.zip
+│   ├── VBRWebUiZhCN-13.1.0.411-full.zip
+│   └── SHA256SUMS-13.1.0.411.txt
+
+└── VBR-13.1.2.57/
+    ├── VBRWebUiZhCN-13.1.2.57-linux.tar.gz
+    ├── VBRWebUiZhCN-13.1.2.57-windows.zip
+    ├── VBRWebUiZhCN-13.1.2.57-full.zip
+    └── SHA256SUMS-13.1.2.57.txt
 
 VeeamONE WebUI Chinese Package/
 └── VeeamONE-13.1.0.7034/
@@ -48,6 +54,7 @@ VeeamONE WebUI Chinese Package/
 | --- | --- | --- | --- | --- |
 | Veeam Backup & Replication | `13.0.2.29` | Linux Appliance / VSA | `99.97%`，仅剩 2 条空字符串资源 | `VBR WebUI Chinese Package/VBR-13.0.2.29/` |
 | Veeam Backup & Replication | `13.1.0.411` | Linux Appliance / Windows | 完整发布包 | `VBR WebUI Chinese Package/VBR-13.1.0.411/` |
+| Veeam Backup & Replication | `13.1.2.57` | Linux Appliance / VSA / Windows | 10358 条目录资源，10342 条已审核中文译文 | `VBR WebUI Chinese Package/VBR-13.1.2.57/` |
 | Veeam ONE | `13.1.0.7034` | Windows | 完整发布包 | `VeeamONE WebUI Chinese Package/VeeamONE-13.1.0.7034/` |
 
 Veeam ONE 包会在登录页和主 Web UI 中注册 `zh-CN (Simplified Chinese)`，保留 English、Japanese、Deutsch、Français。它还包含 Veeam ONE 远程 Analytics/Threat Center 使用的插件资源，因此 VBR 连接 Veeam ONE 后，VBR Web UI 的“分析”页面也会使用中文。VBR 未连接 Veeam ONE 时不会加载这些远程资源，不会改变 VBR 原有页面。
@@ -77,6 +84,19 @@ Veeam ONE 包会在登录页和主 Web UI 中注册 `zh-CN (Simplified Chinese)`
 也可以直接浏览版本目录：
 
 [VBR WebUI Chinese Package / VBR-13.1.0.411](https://github.com/Coku2015/Veeam-Chinese-UI-Packages/tree/main/VBR%20WebUI%20Chinese%20Package/VBR-13.1.0.411)
+
+### VBR 13.1.2.57
+
+当前验证通过的正式包，分别提供 Windows Backup Server、Linux Appliance / VSA，以及包含两者的完整包。
+
+| 适用环境 | 下载文件 |
+| --- | --- |
+| Linux Appliance / VSA | [VBRWebUiZhCN-13.1.2.57-linux.tar.gz](https://github.com/Coku2015/Veeam-Chinese-UI-Packages/raw/main/VBR%20WebUI%20Chinese%20Package/VBR-13.1.2.57/VBRWebUiZhCN-13.1.2.57-linux.tar.gz) |
+| Windows Backup Server | [VBRWebUiZhCN-13.1.2.57-windows.zip](https://github.com/Coku2015/Veeam-Chinese-UI-Packages/raw/main/VBR%20WebUI%20Chinese%20Package/VBR-13.1.2.57/VBRWebUiZhCN-13.1.2.57-windows.zip) |
+| 完整包，包含 Windows 和 Linux | [VBRWebUiZhCN-13.1.2.57-full.zip](https://github.com/Coku2015/Veeam-Chinese-UI-Packages/raw/main/VBR%20WebUI%20Chinese%20Package/VBR-13.1.2.57/VBRWebUiZhCN-13.1.2.57-full.zip) |
+| SHA256 校验文件 | [SHA256SUMS-13.1.2.57.txt](https://github.com/Coku2015/Veeam-Chinese-UI-Packages/raw/main/VBR%20WebUI%20Chinese%20Package/VBR-13.1.2.57/SHA256SUMS-13.1.2.57.txt) |
+
+直接浏览版本目录：[VBR WebUI Chinese Package / VBR-13.1.2.57](https://github.com/Coku2015/Veeam-Chinese-UI-Packages/tree/main/VBR%20WebUI%20Chinese%20Package/VBR-13.1.2.57)
 
 ### Veeam ONE 13.1.0.7034
 
@@ -159,6 +179,30 @@ cd /tmp
 bash VBRWebUiZhCN-13.1.0.411/linux/uninstall-veeam-webui-zh-cn.sh
 ```
 
+### 安装 VBR 13.1.2.57 中文包（当前版本）
+
+Linux Appliance / VSA 的标准流程如下：在 Appliance Console 中启用 SSH，从本机上传安装包，然后通过 `Enter shell` 进入 root shell 执行安装。
+
+```bash
+curl -L -o VBRWebUiZhCN-13.1.2.57-linux.tar.gz "https://github.com/Coku2015/Veeam-Chinese-UI-Packages/raw/main/VBR%20WebUI%20Chinese%20Package/VBR-13.1.2.57/VBRWebUiZhCN-13.1.2.57-linux.tar.gz"
+scp VBRWebUiZhCN-13.1.2.57-linux.tar.gz veeamadmin@vbrvsaip:/tmp/
+```
+
+进入 Appliance shell 后执行：
+
+```bash
+cd /tmp
+tar xvf VBRWebUiZhCN-13.1.2.57-linux.tar.gz
+bash VBRWebUiZhCN-13.1.2.57/linux/install-veeam-webui-zh-cn.sh
+```
+
+卸载还原：
+
+```bash
+cd /tmp
+bash VBRWebUiZhCN-13.1.2.57/linux/uninstall-veeam-webui-zh-cn.sh
+```
+
 ### Linux Appliance 操作截图
 
 启用 SSH Server：
@@ -231,6 +275,26 @@ cd "$env:USERPROFILE\Downloads\VBRWebUiZhCN-13.1.0.411\windows"
 ```powershell
 Set-ExecutionPolicy -Scope Process Bypass
 cd "$env:USERPROFILE\Downloads\VBRWebUiZhCN-13.1.0.411\windows"
+.\Uninstall-VBRWebUiZhCN.ps1
+```
+
+### 安装 VBR 13.1.2.57 中文包（当前版本）
+
+在 Veeam Backup Server 上，以管理员身份打开 PowerShell：
+
+```powershell
+Invoke-WebRequest -Uri "https://github.com/Coku2015/Veeam-Chinese-UI-Packages/raw/main/VBR%20WebUI%20Chinese%20Package/VBR-13.1.2.57/VBRWebUiZhCN-13.1.2.57-windows.zip" -OutFile "$env:USERPROFILE\Downloads\VBRWebUiZhCN-13.1.2.57-windows.zip"
+Expand-Archive -LiteralPath "$env:USERPROFILE\Downloads\VBRWebUiZhCN-13.1.2.57-windows.zip" -DestinationPath "$env:USERPROFILE\Downloads" -Force
+Set-ExecutionPolicy -Scope Process Bypass
+cd "$env:USERPROFILE\Downloads\VBRWebUiZhCN-13.1.2.57\windows"
+.\Install-VBRWebUiZhCN.ps1
+```
+
+安装后浏览器按 `Ctrl+F5` 强制刷新，然后选择“简体中文”。卸载还原：
+
+```powershell
+Set-ExecutionPolicy -Scope Process Bypass
+cd "$env:USERPROFILE\Downloads\VBRWebUiZhCN-13.1.2.57\windows"
 .\Uninstall-VBRWebUiZhCN.ps1
 ```
 
